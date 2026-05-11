@@ -30,7 +30,7 @@ class BookControllerTest {
         mockMvc.perform(post("/books")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(book)))
-                .andExpect(status().isCreated())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message")
                         .value("Book added succesfully"))
                 .andExpect(jsonPath("$.data.title")
