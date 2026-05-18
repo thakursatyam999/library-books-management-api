@@ -6,7 +6,6 @@ import net.satyamthakur.librarybooksmanagementapi.dto.BookUpdateDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-//import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -27,8 +26,13 @@ class BookControllerTest {
     @Test
     void testAddNewBookSuccess() throws Exception {
 
+        Long isbn = System.currentTimeMillis();
+
         BookRequestDto book =
-                new BookRequestDto(1L, "1984", "George Orwell", 500);
+                new BookRequestDto(isbn,
+                        "1984",
+                        "George Orwell",
+                        500);
 
         mockMvc.perform(post("/books")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -43,8 +47,13 @@ class BookControllerTest {
     @Test
     void testAddDuplicateBook() throws Exception {
 
+        Long isbn = System.currentTimeMillis();
+
         BookRequestDto book =
-                new BookRequestDto(1L, "1984", "George Orwell", 500);
+                new BookRequestDto(isbn,
+                        "1984",
+                        "George Orwell",
+                        500);
 
         mockMvc.perform(post("/books")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -59,7 +68,7 @@ class BookControllerTest {
     @Test
     void testGetBookNotFound() throws Exception {
 
-        mockMvc.perform(get("/books/999"))
+        mockMvc.perform(get("/books/999999999"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message")
                         .value("No book found"));
@@ -68,14 +77,19 @@ class BookControllerTest {
     @Test
     void testBorrowBookSuccess() throws Exception {
 
+        Long isbn = System.currentTimeMillis();
+
         BookRequestDto book =
-                new BookRequestDto(2L, "Atomic Habits", "James Clear", 700);
+                new BookRequestDto(isbn,
+                        "Atomic Habits",
+                        "James Clear",
+                        700);
 
         mockMvc.perform(post("/books")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(book)));
 
-        mockMvc.perform(patch("/books/2/borrow"))
+        mockMvc.perform(patch("/books/" + isbn + "/borrow"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message")
                         .value("Book borrowed successfully"))
@@ -86,16 +100,21 @@ class BookControllerTest {
     @Test
     void testReturnBookSuccess() throws Exception {
 
+        Long isbn = System.currentTimeMillis();
+
         BookRequestDto book =
-                new BookRequestDto(3L, "Clean Code", "Robert Martin", 900);
+                new BookRequestDto(isbn,
+                        "Clean Code",
+                        "Robert Martin",
+                        900);
 
         mockMvc.perform(post("/books")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(book)));
 
-        mockMvc.perform(patch("/books/3/borrow"));
+        mockMvc.perform(patch("/books/" + isbn + "/borrow"));
 
-        mockMvc.perform(patch("/books/3/return"))
+        mockMvc.perform(patch("/books/" + isbn + "/return"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.available")
                         .value(true));
@@ -104,17 +123,26 @@ class BookControllerTest {
     @Test
     void testUpdateBookSuccess() throws Exception {
 
+        Long isbn = System.currentTimeMillis();
+
         BookRequestDto book =
-                new BookRequestDto(4L, "Old Title", "Author", 400);
+                new BookRequestDto(isbn,
+                        "Old Title",
+                        "Author",
+                        400);
 
         mockMvc.perform(post("/books")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(book)));
 
         BookUpdateDto updateDto =
-                new BookUpdateDto("New Title", "New Author", 600);
+                new BookUpdateDto(
+                        "New Title",
+                        "New Author",
+                        600
+                );
 
-        mockMvc.perform(put("/books/4")
+        mockMvc.perform(put("/books/" + isbn)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updateDto)))
                 .andExpect(status().isOk())
@@ -125,14 +153,19 @@ class BookControllerTest {
     @Test
     void testDeleteBookSuccess() throws Exception {
 
+        Long isbn = System.currentTimeMillis();
+
         BookRequestDto book =
-                new BookRequestDto(5L, "Delete Me", "Author", 300);
+                new BookRequestDto(isbn,
+                        "Delete Me",
+                        "Author",
+                        300);
 
         mockMvc.perform(post("/books")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(book)));
 
-        mockMvc.perform(delete("/books/5"))
+        mockMvc.perform(delete("/books/" + isbn))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message")
                         .value("Book deleted successfully"));
