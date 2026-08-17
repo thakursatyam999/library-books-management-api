@@ -1,5 +1,6 @@
 inputSet:
   name: testpipe3-inputset
+  tags: {}
   identifier: testpipe3inputset
   orgIdentifier: default
   projectIdentifier: satyamtest
@@ -11,16 +12,5 @@ inputSet:
           build:
             type: branch
             spec:
-              branch: main
-    stages:
-      - stage:
-          identifier: buildandpush
-          type: CI
-          spec:
-            execution:
-              steps:
-                - step:
-                    identifier: BuildAndPushDockerRegistry_1
-                    type: BuildAndPushDockerRegistry
-                    spec:
-                      repo: thakursatyam1104/satyam-kumar-thakur-test
+              branch: main-test-patch
+  isInlineHCEntity: false
