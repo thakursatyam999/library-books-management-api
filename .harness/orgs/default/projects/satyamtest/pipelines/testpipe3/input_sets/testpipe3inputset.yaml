@@ -1,0 +1,26 @@
+inputSet:
+  name: testpipe3-inputset
+  identifier: testpipe3inputset
+  orgIdentifier: default
+  projectIdentifier: satyamtest
+  pipeline:
+    identifier: testpipe3
+    properties:
+      ci:
+        codebase:
+          build:
+            type: branch
+            spec:
+              branch: main
+    stages:
+      - stage:
+          identifier: buildandpush
+          type: CI
+          spec:
+            execution:
+              steps:
+                - step:
+                    identifier: BuildAndPushDockerRegistry_1
+                    type: BuildAndPushDockerRegistry
+                    spec:
+                      repo: thakursatyam1104/satyam-kumar-thakur-test
