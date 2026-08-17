@@ -39,7 +39,7 @@ public class BookController {
 
         List<Book> books = bookService.getAllBooks();
 
-        List<BookResponseDtMZ> list = new ArrayList<>();
+        List<BookResponseDto> list = new ArrayList<>();
 
         for (Book book : books) {
             list.add(toResponseDto(book));
