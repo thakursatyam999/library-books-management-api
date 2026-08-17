@@ -1,0 +1,54 @@
+pipeline:
+  name: testpipe3
+  identifier: testpipe3
+  tags: {}
+  projectIdentifier: satyamtest
+  orgIdentifier: default
+  properties:
+    ci:
+      codebase:
+        connectorRef: githubconnector
+        build: <+input>
+  stages:
+    - stage:
+        name: build-and-push
+        identifier: buildandpush
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: true
+          caching:
+            enabled: true
+            override: true
+          buildIntelligence:
+            enabled: true
+          infrastructure:
+            type: KubernetesDirect
+            spec:
+              connectorRef: kubernetesclusterconnector
+              namespace: default
+              automountServiceAccountToken: true
+              nodeSelector: {}
+              os: Linux
+          execution:
+            steps:
+              - step:
+                  type: Run
+                  name: build-jar-file
+                  identifier: buildjarfile
+                  spec:
+                    connectorRef: dockerregistryconnector
+                    image: maven:3.9-eclipse-temurin-17
+                    shell: Sh
+                    command: mvn clean package
+                  description: build jar file before publishing the artifact to docker registry
+              - step:
+                  type: BuildAndPushDockerRegistry
+                  name: BuildAndPushDockerRegistry_1
+                  identifier: BuildAndPushDockerRegistry_1
+                  spec:
+                    connectorRef: dockerregistryconnector
+                    repo: thakursatyam1104/satyam-kumarthaur-test
+                    tags:
+                      - default
+                    caching: true
