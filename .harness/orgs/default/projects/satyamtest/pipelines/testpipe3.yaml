@@ -48,7 +48,7 @@ pipeline:
                   identifier: BuildAndPushDockerRegistry_1
                   spec:
                     connectorRef: dockerregistryconnector
-                    repo: thakursatyam1104/satyam-kumarthaur-test
+                    repo: thakursatyam1104/satyam-kumar-thakur-test
                     tags:
                       - default
                     caching: true
