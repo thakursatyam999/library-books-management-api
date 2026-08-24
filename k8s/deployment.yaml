@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: library-books-api
+  labels:
+    app: library-books-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: library-books-api
+  template:
+    metadata:
+      labels:
+        app: library-books-api
+    spec:
+      containers:
+        - name: library-books-api
+          image: <+artifact.image>
+          ports:
+            - containerPort: 8080
